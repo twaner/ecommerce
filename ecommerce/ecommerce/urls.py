@@ -4,11 +4,17 @@ from django.contrib import admin
 from django.conf.urls.static import static
 
 urlpatterns = patterns('',
-    # product views
+    # Product views
     url(r'^$', 'products.views.home', name='home'),
+    url(r'^s/$', 'products.views.search', name='search'),
     url(r'^products/$', 'products.views.allview', name='products'),
     url(r'^products/(?P<slug>[\w-]+)/$', 'products.views.single', name='single_product'), # Only accepts a slug, no whitespace.
     #(?P<all_items>.*)/$ or (?P<id>\d+)/$
+
+    # Cart Views
+    url(r'^cart/$', 'carts.views.view', name='cart'),
+    url(r'^cart/(?P<slug>[\w-]+)/$', 'carts.views.update_cart', name='update_cart'),
+
     # admin
     url(r'^admin/', include(admin.site.urls)),
 )

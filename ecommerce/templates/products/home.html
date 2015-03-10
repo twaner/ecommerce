@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% block head_title %}Welcome to {% endblock head_title %}
 {% block head_styles %}
 {#    <style>#}
@@ -27,17 +28,24 @@
     <div class="row">
         {% for p in products %}
             <div class="col-sm-4">
+                <div class="thumbnail">
+                {% if  p.productimage_set.all %}
                 {% for pi in p.productimage_set.all %}
-                  {%  if pi.featured %}
-                    {{ pi.product.title|title }}
-                    <img src="{{ MEDIA_URL }}{{ pi.image }}" class="img-responsive" alt="Responsive image">
-                  {% endif %}
+
+                      {%  if pi.featured %}
+                        <img src="{{ MEDIA_URL }}{{ pi.image }}" class="img-responsive" alt="Responsive image">
+                      {% endif %}
                 {% endfor %}
-            {{ p.id }}
-            {{ p.title|title }}
-            {{ p.price }}
-            {{ p.slug }}
-            </div>
+                {% else %}
+                    <img class="img-responsive" src='{% static "img/placeholder.svg" %}'/>
+                {% endif %}
+                <div class="caption">
+                    <a href="{% url 'single_product' p.slug %}">{{ p.title|title }}</a>
+                    <p>{{ p.description|truncatewords:15 }}</p>
+                    <p><a href="{% url 'single_product' p.slug %}" class="btn btn-primary" role="button">View</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                  </div><!-- /caption -->
+                </div><!-- /thumbnail -->
+            </div><!-- /col-sm-4 -->
             {% cycle "" "" "</div><br /><hr/><div class='row'>" %}
         {% endfor %}
     </div><!-- /row -->
