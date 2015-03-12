@@ -20,12 +20,12 @@
                 <td></td>
             </tr>
         </tfoot>
-            {% for i in cart.items.all %}
+            {% for i in cart.cartitem_set.all %}
                 <tr>
-                    <td>{{ i }}</td>
+                    <td>{{ i.product.title }}</td>
                     <td>{{ i.product.price }}</td>
                     <td>{{ i.quantity }}</td>
-                    <td><a href="{% url 'update_cart' i.product.slug %}">Remove</a> </td>
+                    <td><a href="{% url 'update_cart' i.product.slug %}?qty=0">Remove</a> </td>
                 </tr>
             {% endfor %}
         </table>
