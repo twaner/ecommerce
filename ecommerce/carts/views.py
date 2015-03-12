@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from .models import Cart, CartItem
+from .helper_methods import request_get_helper
 
 # Create your views here.
 from products.models import Product
@@ -32,10 +33,15 @@ def update_cart(request, slug):
         update_qty = False
 
     try:
-        attr = request.GET.get('attr')
+        color1 = request.GET.get('color')
     except:
         attr = None
-
+    # small = x if x < y else y
+    notes = {}
+    color, color_updated = request_get_helper(request, 'color')
+    notes['color'] = color if color_updated else ''
+    size, size_updated = request_get_helper(request, 'size')
+    notes['size'] = size if size_updated else ''
     # Get Cart Id
     try:
         the_id = request.session['cart_id']
@@ -67,6 +73,7 @@ def update_cart(request, slug):
             cart_item.delete()
         else:
             cart_item.quantity = qty
+            cart_item.notes = notes
             cart_item.save()
     else:
         pass

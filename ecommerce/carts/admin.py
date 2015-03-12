@@ -14,6 +14,8 @@ admin.site.register(Cart, CartAdmin)
 
 
 class CartItemAdmin(admin.ModelAdmin):
+    list_display = ['cart', 'product', 'quantity', 'line_total']
+
     class Meta:
         model = CartItem
 

@@ -8,9 +8,10 @@ class CartItem(models.Model):
     cart = models.ForeignKey('Cart', null=True, blank=True)
     product = models.ForeignKey(Product, null=True, blank=True)
     quantity = models.IntegerField(default=1)
-    is_good = models.BooleanField(default=False)
     # line total
     line_total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+    quality = models.BooleanField(default=True)
+    notes = models.TextField(null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
 

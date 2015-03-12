@@ -10,6 +10,7 @@
             <th>Item</th>
             <th>Price</th>
             <th>Qty</th>
+            <th>Notes</th>
             <th></th>
         </thead>
         <tfoot>
@@ -18,6 +19,7 @@
                 <td>Total: {{ cart.total }}</td>
                 <td>Total Items:{{ request.session.items_total }}</td>
                 <td></td>
+                <td></td>
             </tr>
         </tfoot>
             {% for i in cart.cartitem_set.all %}
@@ -25,6 +27,7 @@
                     <td>{{ i.product.title }}</td>
                     <td>{{ i.product.price }}</td>
                     <td>{{ i.quantity }}</td>
+                    <td>{{ i.notes }}</td>
                     <td><a href="{% url 'update_cart' i.product.slug %}?qty=0">Remove</a> </td>
                 </tr>
             {% endfor %}
