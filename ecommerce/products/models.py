@@ -47,7 +47,7 @@ class VariationManager(models.Manager):
         return self.all().filter(category='size')
 
     def colors(self):
-        return self.all().filter(category='colors')
+        return self.all().filter(category='color')
 
 
 VAR_CATEGORIES = (

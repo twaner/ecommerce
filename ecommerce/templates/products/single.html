@@ -30,16 +30,11 @@
                 <h1/>
             </div>
             <div class="col-sm-4 pull-right">
-                <form class=" form pull-right" method="post" action="{% url 'update_cart' product.slug %}">
+                <form class=" form pull-right" method="POST" action="{% url 'update_cart' product.slug %}">
                     {% csrf_token %}
                     <input type="submit" value="Add to Cart" class="btn btn-default btn-block"/>
                     <input name="qty" type="number" value="1" class="form-control"/>
 
-                    <select class="form-control" name="color">
-                        <option value="red">Red</option>
-                        <option value="green">Green</option>
-                        <option value="blue">Blue</option>
-                    </select>
                     {% if product.variation_set.all %}
                         {% if product.variation_set.sizes %}
                             <select class="form-control" name="size">
@@ -49,7 +44,7 @@
                             </select>
                         {% endif %}
                         {% if product.variation_set.colors %}
-                            <select class="form-control" name="colors">
+                            <select class="form-control" name="color">
                             {% for q in product.variation_set.colors %}
                                 <option value="{{ q.title|lower}}">{{ q.title|capfirst}}</option>
                             {% endfor %}
