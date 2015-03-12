@@ -9,20 +9,23 @@
         <thead>
             <th>Item</th>
             <th>Price</th>
+            <th>Qty</th>
             <th></th>
         </thead>
         <tfoot>
             <tr>
                 <td></td>
                 <td>Total: {{ cart.total }}</td>
+                <td>Total Items:{{ request.session.items_total }}</td>
                 <td></td>
             </tr>
         </tfoot>
-            {% for i in cart.products.all %}
+            {% for i in cart.items.all %}
                 <tr>
                     <td>{{ i }}</td>
-                    <td>{{ i.price }}</td>
-                    <td><a href="{% url 'update_cart' i.slug %}">Remove</a> </td>
+                    <td>{{ i.product.price }}</td>
+                    <td>{{ i.quantity }}</td>
+                    <td><a href="{% url 'update_cart' i.product.slug %}">Remove</a> </td>
                 </tr>
             {% endfor %}
         </table>

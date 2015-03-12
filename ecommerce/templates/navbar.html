@@ -39,7 +39,7 @@
         <li>
             <a href="{% url 'cart' %}">Cart
             <span class="badge">
-                {% if not request.sessions.items_total %}
+                {% if not request.session.items_total %}
                     0
                 {% else %}
                     {{ request.session.items_total }}
