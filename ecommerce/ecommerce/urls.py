@@ -13,7 +13,7 @@ urlpatterns = patterns('',
 
     # Cart Views
     url(r'^cart/$', 'carts.views.view', name='cart'),
-    url(r'^cart/(?P<slug>[\w-]+)/$', 'carts.views.update_cart', name='update_cart'),
+    url(r'^cart/(?P<slug>[\w-]+)/$', 'carts.views.add_to_cart', name='add_to_cart'),
 
     # admin
     url(r'^admin/', include(admin.site.urls)),

@@ -35,7 +35,8 @@
                     </td>
                     <td>{{ i.product.price }}</td>
                     <td>{{ i.quantity }}</td>
-                    <td><a href="{% url 'update_cart' i.product.slug %}?qty=0">Remove</a> </td>
+                    <td><a href="#">Remove</a> </td>
+{#                    {% url 'update_cart' i.product.slug %}?qty=0#}
                 </tr>
             {% endfor %}
         </table>
