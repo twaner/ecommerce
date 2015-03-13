@@ -1,24 +1,48 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from .models import Cart, CartItem
-
+from .helper_methods import get_cart_helper
 # Create your views here.
 from products.models import Product, Variation
 
 
 def view(request):
-    try:
-        the_id = request.session['cart_id']
-    except:
-        the_id = None
-    if the_id:
-        cart = Cart.objects.get(id=the_id)
+    # try:
+    #     the_id = request.session['cart_id']
+    # except:
+    #     the_id = None
+    # if the_id:
+    #     cart = Cart.objects.get(id=the_id)
+    cart, context = get_cart_helper(request, "cart_id")
+    if cart is not None:
+        new_total = 0.0
+        # cart item is a fk related set of objects
+        for i in cart.cartitem_set.all():
+            line_total = float(i.product.price) * i.quantity
+            new_total += line_total
+            i.line_total = line_total
+            i.save()
+        request.session['items_total'] = cart.cartitem_set.count()
+
+        cart.total = new_total
+        cart.save()
         context = {"cart": cart}
     else:
         empty_message = "Your cart is empty, please keep shopping."
         context = {"empty": True, "empty_message": empty_message}
     template = 'cart/view.html'
     return render(request, template, context)
+
+
+def remove_from_cart(request, id):
+    cart, context = get_cart_helper(request, "cart_id")
+    if cart is None:
+        return HttpResponseRedirect(reverse("cart"))
+    cart_item = CartItem.objects.get(id=id)
+    cart_item.cart = None
+    cart_item.save()
+    # send success message
+    return HttpResponseRedirect(reverse("cart"))
 
 
 def add_to_cart(request, slug):
@@ -60,18 +84,8 @@ def add_to_cart(request, slug):
             cart_item.variations.add(*product_var)
         cart_item.quantity = qty
         cart_item.save()
-
-        new_total = 0.0
-        # cart item is a fk related set of objects
-        for i in cart.cartitem_set.all():
-            line_total = float(i.product.price) * i.quantity
-            new_total += line_total
-            cart_item.line_total = line_total
-            cart_item.save()
-        request.session['items_total'] = cart.cartitem_set.count()
-
-        cart.total = new_total
-        cart.save()
+        # TODO success msg
         return HttpResponseRedirect(reverse("cart"))
     else:
+        # TODO error msg
         return HttpResponseRedirect(reverse("cart"))
