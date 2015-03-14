@@ -13,7 +13,7 @@ def logout_view(request):
 
 def login_view(request):
     form = LoginForm(request.POST or None)
-
+    submit_btn = "Login"
     if form.is_valid():
         username = form.cleaned_data['username']
         password = form.cleaned_data['password']
@@ -21,7 +21,8 @@ def login_view(request):
         login(request, user)
 
     context = {
-        "form": form
+        "form": form,
+        "submit_btn": submit_btn
     }
 
     return render(request, "form.html", context)
@@ -29,7 +30,7 @@ def login_view(request):
 
 def registration_view(request):
     form = RegistrationForm(request.POST or None)
-
+    submit_btn = "Join"
     if form.is_valid():
         new_user = form.save(commit=False)
         # first_name = form.cleaned_data['first_name']
@@ -41,7 +42,8 @@ def registration_view(request):
         # login(request, user)
 
     context = {
-        "form": form
+        "form": form,
+        "submit_btn": submit_btn
     }
 
     return render(request, "form.html", context)

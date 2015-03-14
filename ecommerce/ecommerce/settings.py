@@ -120,7 +120,7 @@ MEDIA_URL = '/media/'
 # Stripe
 # Used on server to connect token to publishable key. Pub key on browser; secret in code.
 # in separate file for git
-from stripe import STRIPE_SECRET_KEY, STRIPE_PUBLISHABLE_KEY
+from stripe_keys import STRIPE_SECRET_KEY, STRIPE_PUBLISHABLE_KEY
 
 STRIPE_SECRET_KEY = STRIPE_SECRET_KEY
 STRIPE_PUBLISHABLE_KEY = STRIPE_PUBLISHABLE_KEY

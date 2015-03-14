@@ -4,8 +4,8 @@ db.sqlite3
 lwc/settings/local.py
 
 # Stripe Keys
-stripe.py
-
+lwc/stripe_keys.py
+stripe_keys.py
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
