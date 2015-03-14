@@ -22,6 +22,7 @@ urlpatterns = patterns('',
 
     # Accounts
     url(r'^accounts/logout/$', 'accounts.views.logout_view', name='auth_logout'),
+    url(r'^accounts/login/$', 'accounts.views.login_view', name='auth_login'),
 
     # admin
     url(r'^admin/', include(admin.site.urls)),
