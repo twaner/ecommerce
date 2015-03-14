@@ -20,12 +20,12 @@ def request_get_helper(request, name):
 
 def get_cart_helper(request, cart_id):
     cart = None
+    the_id = None
     context = {}
     try:
         the_id = request.session[cart_id]
-    except:
-        the_id = None
-    if the_id:
         cart = Cart.objects.get(id=the_id)
         context = {"cart": cart}
+    except:
+        the_id = None
     return cart , context

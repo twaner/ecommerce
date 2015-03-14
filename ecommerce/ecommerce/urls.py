@@ -18,6 +18,7 @@ urlpatterns = patterns('',
 
     # Products
     url(r'^checkout/$', 'orders.views.checkout', name='checkout'),
+    url(r'^orders/$', 'orders.views.orders', name='orders'),
 
     # admin
     url(r'^admin/', include(admin.site.urls)),

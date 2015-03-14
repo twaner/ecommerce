@@ -58,7 +58,7 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 # User
 
-#AUTH_USER_MODEL = 'django.contrib.auth.User'
+AUTH_USER_MODEL = 'auth.User'
 
 
 # Database

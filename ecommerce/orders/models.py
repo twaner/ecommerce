@@ -5,11 +5,11 @@ from django.contrib.auth import get_user_model
 from carts.models import Cart
 
 # User
-try:
-    user = get_user_model()
-except ImportError:
-    from django.contrib.auth.models import User
-    user = get_user_model()
+# try:
+#     user = get_user_model()
+# except ImportError:
+#     from django.contrib.auth.models import User
+#     user = get_user_model()
 # Choices
 
 STATUS_CHOICES = (
