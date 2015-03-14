@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'products',
     'carts',
     'orders',
+    'accounts',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -113,9 +114,9 @@ STATICFILES_DIRS = (
 # Media
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'media')
-print(MEDIA_ROOT)
-# MEDIA_ROOT = '/Users/taiowawaner/Documents/ecommerce/ecommerce/static/media'
-
 MEDIA_URL = '/media/'
 
+
+# Stripe
+# Used on server to connect token to publishable key. Pub key on browser; secret in code.
 
