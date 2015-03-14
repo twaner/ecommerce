@@ -20,6 +20,9 @@ urlpatterns = patterns('',
     url(r'^checkout/$', 'orders.views.checkout', name='checkout'),
     url(r'^orders/$', 'orders.views.orders', name='orders'),
 
+    # Accounts
+    url(r'^accounts/logout/$', 'accounts.views.logout_view', name='auth_logout'),
+
     # admin
     url(r'^admin/', include(admin.site.urls)),
 )

@@ -10,6 +10,13 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 # Signals
 
 def get_or_create_stripe(sender, user, *args, **kwargs):
+    """
+    Signal function to ensure a user has a Stripe ID
+    :param sender: django.contrib.auth.models.User
+    :param user: User who is logged in.
+    :param args: args.
+    :param kwargs: kwargs.
+    """
     try:
         user.userstripe.stripe_id
     except UserStripe.DoesNotExist:
