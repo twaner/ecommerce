@@ -1,7 +1,53 @@
 {% extends "base.html" %}
 
+{#{% block content %}#}
+{#    {% for p in products %}#}
+{#        <li>{{ p.title }} {{ p.get_price }}</li>#}
+{#    {% endfor %}#}
+{#{% endblock %}#}
+
+{% load staticfiles %}
+{% block head_title %}Products || {% endblock head_title %}
+{% block head_styles %}
+{#    <style>#}
+{#       #}
+{#    </style>#}
+{% endblock head_styles %}
+
+
 {% block content %}
-    {% for p in products %}
-        <li>{{ p.title }} {{ p.get_price }}</li>
-    {% endfor %}
-{% endblock %}
+    <div class="row">
+        {% for p in products %}
+            <div class="col-sm-2">
+                <div class="thumbnail">
+                    {% if  p.productimage_set.all %}
+                    {% for pi in p.productimage_set.all %}
+                          {%  if pi.featured %}
+                              <div style="width: 100px;height: 100px; margin: 0 auto;">
+                                <a href="{{ p.get_absolute_url }}">
+                                    <div class="background_img_thumb" style='height: 100px; background-image: url("{{ MEDIA_URL }}{{ pi.image }}");'></div>
+                                </a>
+                              </div>
+                          {% endif %}
+                    {% endfor %}
+                    {% else %}
+                        <div style="width: 100px;height: 100px; margin: 0 auto;">
+                                <a href="{{ p.get_absolute_url }}">
+                                    <div class="background_img_thumb" style='height: 100px;'></div>
+                                </a>
+                              </div>
+                    {% endif %}
+                    <div class="caption">
+                        <a href="{{ p.get_absolute_url }}">{{ p.title|title }}</a>
+                        <p>{{ p.description|truncatewords:15 }}</p>
+                        <p>
+                            <a href="{% url 'single_product' p.slug %}" class="btn btn-primary" role="button">View</a>
+                            <a href="#" class="btn btn-default" role="button">Button</a>
+                        </p>
+                    </div><!-- /caption -->
+                </div><!-- /thumbnail -->
+            </div><!-- /col-sm-4 -->
+            {% cycle "" "" "" "" "" "</div><br /><hr/><div class='row'>" %}
+        {% endfor %}
+    </div><!-- /row -->
+{% endblock content %}

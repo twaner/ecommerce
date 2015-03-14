@@ -19,6 +19,8 @@ def request_get_helper(request, name):
 
 
 def get_cart_helper(request, cart_id):
+    cart = None
+    context = {}
     try:
         the_id = request.session[cart_id]
     except:
@@ -26,4 +28,4 @@ def get_cart_helper(request, cart_id):
     if the_id:
         cart = Cart.objects.get(id=the_id)
         context = {"cart": cart}
-    return cart, context
+    return cart , context
