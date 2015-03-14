@@ -56,6 +56,11 @@ ROOT_URLCONF = 'ecommerce.urls'
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 
+# User
+
+#AUTH_USER_MODEL = 'django.contrib.auth.User'
+
+
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
