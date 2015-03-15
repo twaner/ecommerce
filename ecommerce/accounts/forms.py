@@ -17,8 +17,7 @@ class LoginForm(forms.Form):
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
-            raise forms.ValidationError("Are you sure you are registered? We cannot find this user: %s." %
-                                        str(username))
+            raise forms.ValidationError("Are you sure you are registered? We cannot find this user")
         return username
 
     def clean_password(self):
@@ -29,8 +28,7 @@ class LoginForm(forms.Form):
             user = User.objects.get(username=username)
         except:
             user = None
-            raise forms.ValidationError("Are you sure you are registered? We cannot find this user." %
-                                        str(username))
+            raise forms.ValidationError("Are you sure you are registered? We cannot find this user.")
         if user is not None and not user.check_password(password):
             raise forms.ValidationError("Invalid Password")
         elif user is None:

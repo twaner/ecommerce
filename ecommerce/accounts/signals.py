@@ -12,16 +12,13 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 def get_or_create_stripe_user(user):
-    try:
-        user.userstripe.stripe_id
-    except UserStripe.DoesNotExist:
+    new_user_stripe, created = UserStripe.objects.get_or_create(user=user)
+    if created:
         customer = stripe.Customer.create(
             email=str(user.email)
         )
-        new_user_stripes = UserStripe.objects.create(user=user, stripe_id=customer.id)
-    except:
-        pass
-
+        new_user_stripe.stripe_id = customer.id
+        new_user_stripe.save()
 
 # Signals
 
@@ -57,9 +54,15 @@ def user_created(sender, instance, created, *args, **kwargs):
     :param kwargs: kwargs
     """
     print(sender, instance, created)
+    user = instance
     if created:
-        get_or_create_stripe_user(instance)
-        # TODO send email
+        get_or_create_stripe_user(user)
+        email_confirmed, email_is_created = UserStripe.objects.get_or_create(user=user)
+        if email_is_created:
+            #create hash
+            #send email
+            pass
+        
 
 
 post_save.connect(user_created, sender=settings.AUTH_USER_MODEL)
