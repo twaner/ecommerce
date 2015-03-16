@@ -1,14 +1,15 @@
 # Databases
 .DS_STORE
 db.sqlite3
-lwc/settings/local.py
+ecommerece/settings/local.py
 
 # Stripe Keys
-lwc/stripe_keys.py
+ecommerece/stripe_keys.py
 stripe_keys.py
 
 # email setup
-
+ecommerece/email_info.py
+email_info.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
