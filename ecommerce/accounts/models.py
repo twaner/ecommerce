@@ -25,7 +25,6 @@ class EmailConfirmed(models.Model):
 
 	def activate_user_email(self):
 		# send email here & render a string
-		subject = "Activate your email"
 		activation_url = "http://localhost:8000/accounts/activate/%s" \
 		% (self.activation_key)
 		context = {
@@ -34,11 +33,9 @@ class EmailConfirmed(models.Model):
 			"user": self.user.username,
 		}
 		message = render_to_string("accounts/activation_message.txt", context)
+		subject = "Activate your email"
 		print(message)
 		# self.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
-
-
-
 
 	def email_user(self, subject, message, from_email=None, **kwargs):
 		send_mail(subject, message, from_email,[self.user.email], **kwargs)

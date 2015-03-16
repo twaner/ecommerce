@@ -6,6 +6,10 @@ lwc/settings/local.py
 # Stripe Keys
 lwc/stripe_keys.py
 stripe_keys.py
+
+# email setup
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
