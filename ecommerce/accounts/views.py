@@ -6,12 +6,20 @@ from django.contrib import messages
 from .forms import LoginForm, RegistrationForm
 from .models import EmailConfirmed
 
+
 # Create your views here.
 
 
 def logout_view(request):
     logout(request)
-    messages.success(request, "Successfully logged out. Feel free to log in again.")
+    # messages.success(request, 'Successfully logged out. Feel free to <a href="{0}">login</a> again.'
+    messages.success(request, "<strong>Successfully</strong> logged out. Feel free to <a href='%s'>login</a> again."
+                     % (reverse('auth_login')), extra_tags="safe")
+    # messages.debug(request, '%s SQL statements were executed.' % 2)
+    # messages.info(request, 'INFO.')
+    messages.warning(request, 'WARNING.')
+    # messages.error(request, 'ERROR.')
+
     return HttpResponseRedirect(reverse('auth_login'))
 
 
@@ -65,7 +73,6 @@ def activation_view(request, activation_key):
     if SHA1_RE.search(activation_key):
         try:
             instance = EmailConfirmed.objects.get(activation_key=activation_key)
-            print("instance = EmailConfirmed.objects.get(activation_key=activation_key)")
         except EmailConfirmed.DoesNotExist:
             instance = None
             messages.success(request, "There was an error with your request.")
