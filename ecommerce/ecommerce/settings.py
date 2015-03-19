@@ -56,6 +56,11 @@ ROOT_URLCONF = 'ecommerce.urls'
 
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
+# Site URL
+
+SITE_URL = "http://localhost:8000"
+if DEBUG:
+    SITE_URL = "http://localhost:8000"
 
 # User
 

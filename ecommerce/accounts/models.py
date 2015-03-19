@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.core.mail import send_mail
+from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 
 # Create your models here.
@@ -24,8 +25,8 @@ class EmailConfirmed(models.Model):
         return str(self.confirmed)
 
     def activate_user_email(self):
-        activation_url = "http://localhost:8000/accounts/activate/%s" \
-                         % self.activation_key
+        activation_url = "{0}{1}" \
+                         .format(settings.SITE_URL, reverse("activation_view", args=[self.activation_key]))
         context = {
             "activation_key": self.activation_key,
             "activation_url": activation_url,
