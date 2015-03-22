@@ -6,14 +6,15 @@ from .models import Product, ProductImage
 
 def home(request):
     products = Product.objects.all()
-    marketing_message = MarketingMessage.objects.all()[0]
-    print("HOME {0}".format(marketing_message))
-    context = {'products': products, "marketing_message": marketing_message}
+    context = {'products': products}
     template = "products/home.html"
     return render(request, template, context)
 
 
 def allview(request):
+
+    del request.session['marketing_message']
+
     products = Product.objects.all()
     context = {'products': products}
     template = 'products/all.html'
