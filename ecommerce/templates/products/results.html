@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block content %}
+    <h1>Searched for: {{ query }}</h1>
+    <table class="table">
+        <thead>
+            <th></th>
+            <th>Product</th>
+        </thead>
+        <tbody>
+            {% for p in products %}
+                <tr>
+                    <td style="width: 160px; height: 160px;">
+                        {% if p.productimage_set.all %}
+                            {% for i in p.productimage_set.all %}
+                                {% if i.featured %}
+                                    <a href="{{ p.get_absolute_url }}">
+                                        <div class="background_img_thumb" style='background-image: url("{{ MEDIA_URL }}{{ i.image }}");
+                                                height: 160px;width: 160px;'></div>
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <div class="background_img_thumb" style="width: 160px;height: 160px;">
+                            <a href='{{ p.get_absolute_url }}'></a>
+                            </div>
+                        {% endif %}
+                    </td>
+                    <td><a href='{{ p.get_absolute_url }}'>{{ p }}</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock content %}
