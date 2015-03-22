@@ -1,5 +1,6 @@
 import datetime
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 
@@ -14,11 +15,11 @@ class MarketingQueryset(models.QuerySet):
 
     def featured(self):
         """
-        Gets a featured MarketingMessages. Filters by start_date lt now and end_date gte now.
+        Gets a featured MarketingMessages. Filters by start_date lt now and end_date gte now using the timezone as datetime.
         :return: Featured MarketingMessages.
         """
-        return self.filter(featured=True).filter(start_date__lt=datetime.datetime.now()) \
-            .filter(end_date__gte=datetime.datetime.now())
+        return self.filter(featured=True).filter(start_date__lt=timezone.now()) \
+            .filter(end_date__gte=timezone.now())
 
 
 class MarketingManager(models.Manager):
