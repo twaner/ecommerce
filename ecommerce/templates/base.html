@@ -28,7 +28,7 @@
                 border-radius: 0px;
                 text-align: center;
                 background-color: slategrey;
-                display: none;
+{#                display: none;#}
             }
             .alert-top-message h3 {
                 margin: 0px;
@@ -55,12 +55,14 @@
   </head>
 
   <body>
+  {% if marketing_message %}
   <div class="alert alert-top-message alert-dismissible" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span> </button>
       <div class="container">
-        <h3>Hello There</h3>
+        <h3>{{ marketing_message.message|safe }}</h3>
       </div>
   </div>
+  {% endif %}
     {% include "navbar.html" %}
     {% block jumbotron %}
     {% endblock jumbotron %}

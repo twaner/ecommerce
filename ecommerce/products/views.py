@@ -1,11 +1,14 @@
 from django.shortcuts import render, Http404
+from marketing.models import MarketingMessage
 from .models import Product, ProductImage
 # Create your views here.
 
 
 def home(request):
     products = Product.objects.all()
-    context = {'products': products}
+    marketing_message = MarketingMessage.objects.all()[0]
+    print("HOME {0}".format(marketing_message))
+    context = {'products': products, "marketing_message": marketing_message}
     template = "products/home.html"
     return render(request, template, context)
 
