@@ -26,6 +26,10 @@ urlpatterns = patterns('',
     url(r'^accounts/register/$', 'accounts.views.registration_view', name='auth_register'),
     url(r'^accounts/activate/(?P<activation_key>\w+)/$', 'accounts.views.activation_view', name='activation_view'),
 
+    # Market
+    url(r'^ajax/dismiss_marketing_message$', 'marketing.views.dismiss_marketing_message',
+        name='dismiss_marketing_message'),
+
     # admin
     url(r'^admin/', include(admin.site.urls)),
 )

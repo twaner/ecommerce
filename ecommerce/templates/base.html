@@ -57,7 +57,7 @@
   <body>
   {% if request.session.marketing_message %}
   <div class="alert alert-top-message alert-dismissible" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span> </button>
+      <button id="market-message-btn" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span> </button>
       <div class="container">
         <h3>{{ request.session.marketing_message|safe }}</h3>
       </div>
@@ -100,13 +100,34 @@
     <!-- Placed at the end of the document so the pages load faster -->
 {#    <link rel="stylesheet" href="{% static 'js/jquery.min.js' %}">#}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-{#  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>#}
     <!-- Latest compiled and minified JavaScript -->
 {#    <link rel="stylesheet" href="{% static 'js/bootstrap.min.js' %}">#}
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-{#  <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>#}
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
+        <script>
+            $(document).ready(function(){
+                $("#market-message-btn").click(function(){
+{#                    alert("Hello")#}
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'dismiss_marketing_message' %}",
+                        data: {
+                            "dismiss-market": true,
+                            csrfmiddlewaretoken: "{{ csrf_token }}"
+                        },
+                        success: function(data){
+{#                            console.log("SUCCESS");#}
+{#                            console.log(data);#}
+                        },
+                        error: function () {
+                            alert("Error! Something went wrong. Please try again later.")
+                        }
+                    });
+                });
+            });
+        </script>
         <script>
             $(document).ready(function(){
                 {% block jqeury_block%}
