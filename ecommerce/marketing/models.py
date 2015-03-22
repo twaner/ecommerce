@@ -55,8 +55,7 @@ class MarketingManager(models.Manager):
             return None
 
 
-class MarketingMessage(models.Model):
-    message = models.CharField(max_length=120, blank=False, null=False)
+class MarketingBase(models.Model):
     active = models.BooleanField(default=False)
     featured = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
@@ -65,10 +64,45 @@ class MarketingMessage(models.Model):
     end_date = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
 
     class Meta:
+        abstract = True
+
+class MarketingMessage(MarketingBase):
+    message = models.CharField(max_length=120, blank=False, null=False)
+    # active = models.BooleanField(default=False)
+    # featured = models.BooleanField(default=False)
+    # timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
+    # updated = models.DateTimeField(auto_now_add=False, auto_now=True)
+    # start_date = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
+    # end_date = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
+
+    class Meta:
         ordering = ["-start_date", "-end_date"]
 
     objects = MarketingManager()
     # messages = MarketingManager()
+
+    def __str__(self):
+        return str(self.message[:12])
+
+
+def slider_upload(instance, filename):
+    return "images/slider/{0}".format(str(filename))  #can add str(instance.user)
+
+class Slider(MarketingBase):
+    image = models.ImageField(upload_to=slider_upload)
+    header_text = models.CharField(max_length=120, blank=True, null=True)
+    text = models.CharField(max_length=120, blank=True, null=True)
+    # active = models.BooleanField(default=False)
+    # featured = models.BooleanField(default=False)
+    # timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
+    # updated = models.DateTimeField(auto_now_add=False, auto_now=True)
+    # start_date = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
+    # end_date = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
+
+    class Meta:
+        ordering = ["-start_date", "-end_date"]
+
+    objects = MarketingManager()
 
     def __str__(self):
         return str(self.message[:12])
