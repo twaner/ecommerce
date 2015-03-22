@@ -5,6 +5,11 @@ from .models import Product, ProductImage
 
 
 def home(request):
+    """
+    Home View. Homepage for website.
+    :param request: Http request.
+    :return: Homepage.
+    """
     products = Product.objects.all()
     context = {'products': products}
     template = "products/home.html"
@@ -12,9 +17,12 @@ def home(request):
 
 
 def allview(request):
-
+    """
+    All View. This page shows all products. Will delete the session marketing_message.
+    :param request: Http request.
+    :return: Products page.
+    """
     del request.session['marketing_message']
-
     products = Product.objects.all()
     context = {'products': products}
     template = 'products/all.html'
@@ -22,6 +30,12 @@ def allview(request):
 
 
 def single(request, slug):
+    """
+    Single View. This page shows a single product.
+    :param request: Http requuest.
+    :param slug: Slug for product.
+    :return: Single product page. :raise Http404:
+    """
     try:
         print(slug)
         product = Product.objects.get(slug=slug)
@@ -35,6 +49,11 @@ def single(request, slug):
 
 
 def search(request):
+    """
+    Search View
+    :param request:
+    :return:
+    """
     try:
         q = request.GET.get('q')
     except:

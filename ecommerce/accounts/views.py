@@ -11,6 +11,11 @@ from .models import EmailConfirmed
 
 
 def logout_view(request):
+    """
+    Logout View.
+    :param request: Http request.
+    :return: Redirect to login page.
+    """
     logout(request)
     # messages.success(request, 'Successfully logged out. Feel free to <a href="{0}">login</a> again.'
     messages.success(request, "<strong>Successfully</strong> logged out. Feel free to <a href='%s'>login</a> again."
@@ -24,6 +29,11 @@ def logout_view(request):
 
 
 def login_view(request):
+    """
+    Logout View.
+    :param request: Http request.
+    :return: Redirect to home page or login form.
+    """
     form = LoginForm(request.POST or None)
     submit_btn = "Login"
     if form.is_valid():
@@ -45,6 +55,11 @@ def login_view(request):
 
 
 def registration_view(request):
+    """
+    Registration View. Allows a user to register an account.
+    :param request: Http request.
+    :return: Redirect to the home page or registration page.
+    """
     form = RegistrationForm(request.POST or None)
     submit_btn = "Join"
     if form.is_valid():
@@ -70,6 +85,11 @@ SHA1_RE = re.compile('^[a-f0-9]{40}$')
 
 
 def activation_view(request, activation_key):
+    """
+    Activation View. Allows a user to activate their account. Creates a activation key that will be send to the user.
+    :param request: Http request.
+    :return: Activation complete page or Http404.
+    """
     if SHA1_RE.search(activation_key):
         try:
             instance = EmailConfirmed.objects.get(activation_key=activation_key)
