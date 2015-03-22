@@ -1,9 +1,10 @@
+import datetime
 from django.db import models
 
 # Create your models here.
 
 
-class MarketingMessageQueryset(models.QuerySet):
+class MarketingQueryset(models.QuerySet):
     def active(self):
         """
         Gets active MarketingMessages.
@@ -13,19 +14,20 @@ class MarketingMessageQueryset(models.QuerySet):
 
     def featured(self):
         """
-        Gets featured MarketingMessages.
+        Gets a featured MarketingMessages. Filters by start_date lt now and end_date gte now.
         :return: Featured MarketingMessages.
         """
-        return self.filter(featured=True)
+        return self.filter(featured=True).filter(start_date__lt=datetime.datetime.now()) \
+            .filter(end_date__gte=datetime.datetime.now())
 
 
-class MarketingMessageManager(models.Manager):
+class MarketingManager(models.Manager):
     def get_queryset(self):
         """
         Gets a queryset of MarketingMessages.
         :return: a queryset of MarketingMessages.
         """
-        return MarketingMessageQueryset(self.model, using=self.db)
+        return MarketingQueryset(self.model, using=self.db)
 
     def all(self):
         """
@@ -43,11 +45,11 @@ class MarketingMessageManager(models.Manager):
 
     def get_featured(self):
         """
-        Gets the first featured MarketingMessage or returns None if no MarketingMessages are active.
+        Uses the Model's queryset featured method to get the first featured MarketingMessage that meets the criteria.
         :return: A featured MarketingMessage or None
         """
         try:
-            return self.featured().order_by("-start_date")[0]
+            return self.featured()[0]
         except:
             return None
 
@@ -61,8 +63,11 @@ class MarketingMessage(models.Model):
     start_date = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
     end_date = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
 
-    objects = MarketingMessageManager()
-    # messages = MarketingMessageManager()
+    class Meta:
+        ordering = ["-start_date", "-end_date"]
+
+    objects = MarketingManager()
+    # messages = MarketingManager()
 
     def __str__(self):
         return str(self.message[:12])

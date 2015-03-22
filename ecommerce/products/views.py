@@ -32,7 +32,7 @@ def allview(request):
 def single(request, slug):
     """
     Single View. This page shows a single product.
-    :param request: Http requuest.
+    :param request: Http request.
     :param slug: Slug for product.
     :return: Single product page. :raise Http404:
     """
@@ -50,9 +50,9 @@ def single(request, slug):
 
 def search(request):
     """
-    Search View
-    :param request:
-    :return:
+    Search View. This page shows the results of the user's search.
+    :param request:Http request.
+    :return: Page of filtered products or the home page.
     """
     try:
         q = request.GET.get('q')

@@ -13,6 +13,11 @@ def view(request):
     #     the_id = None
     # if the_id:
     #     cart = Cart.objects.get(id=the_id)
+    """
+    Cart View. This page shows items that are in the user's cart.
+    :param request: Http request.
+    :return:Cart page.
+    """
     cart, context = get_cart_helper(request, "cart_id")
     if cart is not None:
         new_total = 0.0
@@ -35,6 +40,12 @@ def view(request):
 
 
 def remove_from_cart(request, id):
+    """
+    Remove View. This page removes an item from a user's cart.
+    :param request: Http request.
+    :param id: Product Id.
+    :return: Cart page.
+    """
     cart, context = get_cart_helper(request, "cart_id")
     if cart is None:
         return HttpResponseRedirect(reverse("cart"))
@@ -46,6 +57,13 @@ def remove_from_cart(request, id):
 
 
 def add_to_cart(request, slug):
+    """
+    Add To Cart View. Adds an item to the cart. This sets the session's expiration. Gets the user's existing cart or
+    creates a new cart. Then adds the product to the cart if the product exists.
+    :param request: Http request.
+    :param slug: Product's slug.
+    :return: Cart page.
+    """
     request.session.set_expiry(120000)
     # Get the cart
     try:
