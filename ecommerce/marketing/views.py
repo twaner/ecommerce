@@ -1,4 +1,7 @@
+import datetime
 import json
+from django.conf import settings
+from django.utils import timezone
 from django.shortcuts import render, HttpResponse, Http404
 
 # Create your views here.
@@ -7,10 +10,11 @@ from django.shortcuts import render, HttpResponse, Http404
 def dismiss_marketing_message(request):
     if request.is_ajax():
         data = {"success": True}
-        print("DATA: {0}".format(str(data)))
         json_data = json.dumps(data)
-        print("JSON DATA {0}".format(str(json_data)))
+        request.session['dismiss_message_for'] = str(timezone.now() +
+                                                     datetime.timedelta(hours=settings.MARKETING_HOURS_OFFSET,
+                                                                        seconds=settings.MARKETING_SECONDS_OFFSET))
         return HttpResponse(json_data, content_type="application/json")
     else:
         raise Http404
-        #TODO return something else
+        # TODO return something else
