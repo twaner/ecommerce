@@ -11,10 +11,11 @@
 {% endblock jqeury_block%}
 {# Commnets go here! #}
 {% block jumbotron %}
-    {% include "carousel.html" %}
+    {% if sliders %}
+        {% include "carousel.html" with sliders=sliders %}
+    {% endif %}
 {#    <br />#}
 {% endblock jumbotron %}
-
 {% block jumbotron2 %}
     <div class="container">
         <div class="jumbotron">

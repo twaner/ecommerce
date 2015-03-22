@@ -1,4 +1,5 @@
 import datetime
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
@@ -66,6 +67,7 @@ class MarketingBase(models.Model):
     class Meta:
         abstract = True
 
+
 class MarketingMessage(MarketingBase):
     message = models.CharField(max_length=120, blank=False, null=False)
     # active = models.BooleanField(default=False)
@@ -88,10 +90,12 @@ class MarketingMessage(MarketingBase):
 def slider_upload(instance, filename):
     return "images/slider/{0}".format(str(filename))  #can add str(instance.user)
 
+
 class Slider(MarketingBase):
     image = models.ImageField(upload_to=slider_upload)
     header_text = models.CharField(max_length=120, blank=True, null=True)
     text = models.CharField(max_length=120, blank=True, null=True)
+    order = models.IntegerField(default=0)
     # active = models.BooleanField(default=False)
     # featured = models.BooleanField(default=False)
     # timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
@@ -100,9 +104,12 @@ class Slider(MarketingBase):
     # end_date = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
 
     class Meta:
-        ordering = ["-start_date", "-end_date"]
+        ordering = ["order", "-start_date", "-end_date"]
 
     objects = MarketingManager()
 
     def __str__(self):
-        return str(self.message[:12])
+        return str(self.image)
+
+    def get_image_url(self):
+        return "{0}/{1}".format(settings.MEDIA_URL, self.image)

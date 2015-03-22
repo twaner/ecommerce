@@ -1,28 +1,30 @@
+{% if sliders %}
 <div class="container">
     <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" style="margin-top: -19px; margin-bottom: 19px;">
       <!-- Indicators -->
       <ol class="carousel-indicators">
-        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+        {% for s in sliders %}
+        <li data-target="#carousel-example-generic" data-slide-to="{{ forloop.counter }}"
+            {% if forloop.first %}class="active"{% endif %}></li>
+        {% endfor %}
       </ol>
 
       <!-- Wrapper for slides -->
       <div class="carousel-inner" role="listbox">
-        <div class="item active">
-          <img src="http://philhollett.com.au/wordpress/wp-content/uploads/Meelup-MEE09e.jpg" alt="...">
-          <div class="carousel-caption">
-            <p>Hello</p>
+        {% for s in sliders %}
+          <div class="item {% if forloop.first %}active{% endif %}">
+              <img src="{{ s.get_image_url }}" alt="...">
+              <div class="carousel-caption">
+                  {%  if s.header_text %}
+                    <h3>{{ s.header_text }}</h3>
+                  {%  endif %}
+                  {%  if s.text %}
+                    <p>{{ s.header_text }}</p>
+                  {%  endif %}
+              </div>
           </div>
-        </div>
-        <div class="item">
-          <img src="http://www.oasis-land.com/perch/resources/seven-mile-beach-grand-cayman-1.jpg" alt="...">
-          <div class="carousel-caption">
-            <p>Hello 2</p>
-          </div>
-        </div>
-
-      </div>
+        {% endfor %}
+      </div> <!--/carousel-inner-->
 
       <!-- Controls -->
       <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
@@ -35,3 +37,4 @@
       </a>
     </div>
 </div> <!--/container -->
+{% endif %}

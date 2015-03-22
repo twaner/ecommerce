@@ -1,5 +1,5 @@
 from django.shortcuts import render, Http404
-from marketing.models import MarketingMessage
+from marketing.models import MarketingMessage, Slider
 from .models import Product, ProductImage
 # Create your views here.
 
@@ -10,8 +10,12 @@ def home(request):
     :param request: Http request.
     :return: Homepage.
     """
+    sliders = Slider.objects.all()
     products = Product.objects.all()
-    context = {'products': products}
+    context = {
+        'products': products,
+        "sliders": sliders,
+    }
     template = "products/home.html"
     return render(request, template, context)
 
