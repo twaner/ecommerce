@@ -10,7 +10,7 @@ def home(request):
     :param request: Http request.
     :return: Homepage.
     """
-    sliders = Slider.objects.all()
+    sliders = Slider.objects.all_featured()
     products = Product.objects.all()
     context = {
         'products': products,

@@ -16,7 +16,7 @@ admin.site.register(MarketingMessage, MarketingMessageAdmin)
 
 class SliderAdmin(admin.ModelAdmin):
     list_display = ["__str__", "order", "start_date", "end_date", "active", "featured"]
-    list_editable = ["order"]
+    list_editable = ["order", "start_date", "end_date", "active", "featured"]
 
     class Meta:
         model = Slider

@@ -13,13 +13,15 @@
       <div class="carousel-inner" role="listbox">
         {% for s in sliders %}
           <div class="item {% if forloop.first %}active{% endif %}">
-              <img src="{{ s.get_image_url }}" alt="...">
+              {% if s.url_link|safe %}<a href="{{ s.url_link }}">{% endif %}
+                <img src="{{ s.get_image_url }}" alt="...">
+              {%  if s.url_link|safe %}</a>{% endif %}
               <div class="carousel-caption">
                   {%  if s.header_text %}
-                    <h3>{{ s.header_text }}</h3>
+                    <h3>{{ s.header_text|safe }}</h3>
                   {%  endif %}
                   {%  if s.text %}
-                    <p>{{ s.header_text }}</p>
+                    <p>{{ s.header_text|safe }}</p>
                   {%  endif %}
               </div>
           </div>

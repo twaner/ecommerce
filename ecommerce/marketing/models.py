@@ -38,7 +38,7 @@ class MarketingManager(models.Manager):
         """
         return self.get_queryset().active()
 
-    def featured(self):
+    def all_featured(self):
         """
         Gets and returns a queryset of MarketingMessages that are active and featured.
         :return: queryset of active and featured MarketingMessages.
@@ -96,12 +96,7 @@ class Slider(MarketingBase):
     header_text = models.CharField(max_length=120, blank=True, null=True)
     text = models.CharField(max_length=120, blank=True, null=True)
     order = models.IntegerField(default=0)
-    # active = models.BooleanField(default=False)
-    # featured = models.BooleanField(default=False)
-    # timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
-    # updated = models.DateTimeField(auto_now_add=False, auto_now=True)
-    # start_date = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
-    # end_date = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
+    url_link = models.CharField(max_length=250, null=True, blank=True)
 
     class Meta:
         ordering = ["order", "-start_date", "-end_date"]
