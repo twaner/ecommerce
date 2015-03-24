@@ -13,11 +13,12 @@
     {% endblock %}
     <!-- Latest compiled and minified CSS -->
     {% load staticfiles %}
-{#    <link rel="stylesheet" href='{% static "css/bootstrap.min.css" %}'>#}
-{#    <link rel="stylesheet" href='{% static "css/bootstrap-theme.min.css" %}'>#}
+    
+    {# <link rel="stylesheet" href='{% static "css/bootstrap.min.css" %}'>
+    <link rel="stylesheet" href='{% static "css/bootstrap-theme.min.css" %}'>  #}
+    
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css"> 
 
     <!-- Custom styles for this template -->
     <link href="http://getbootstrap.com/examples/navbar-static-top/navbar-static-top.css" rel="stylesheet">
@@ -28,10 +29,14 @@
                 border-radius: 0px;
                 text-align: center;
                 background-color: slategrey;
-{#                display: none;#}
+{#                display: none; #}
             }
             .alert-top-message h3 {
                 margin: 0px;
+            }
+
+            .modal-dialog {
+                margin-top: 20%;
             }
             .background_img_thumb {
                 width: 100%; height: 100%;
@@ -103,14 +108,18 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-{#    <link rel="stylesheet" href="{% static 'js/jquery.min.js' %}">#}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    
+    {# <link rel="stylesheet" href="{% static 'js/jquery.min.js' %}"> #}
+    
+    {# <link rel="stylesheet" href="{% static 'js/bootstrap.min.js' %}">  #}
     <!-- Latest compiled and minified JavaScript -->
-{#    <link rel="stylesheet" href="{% static 'js/bootstrap.min.js' %}">#}
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
 
+    {# for online #}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
         <script>
             $(document).ready(function(){
                 $("#market-message-btn").click(function(){
@@ -131,13 +140,37 @@
                         }
                     });
                 });
-
+                {% if not request.user.is_authenticated and not request.session.email_added_marketing %}
                 function showModal() {
                     $("#marketing-modal").modal("show");
                     console.log("Showing modal");
-{#                    setTimeout(showModal, 5000)#}
                 };
+                showModal()
                 setTimeout(showModal, 5000)
+
+                $("#sendMarketingForm").click(function(e){
+                    e.preventDefault();
+                    var mForm =  $("#sendForm").serialize();
+                    // console.log("mFORM" + mForm);
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'ajax_email_signup' %}",
+                        data: mForm,
+                        success: function(data){
+                            // console.log(data);
+                            $("#modalMessage").html("<p>" + data + "</p>");
+                            $("#marketing-modal").modal("hide");
+                        },
+                        error: function (data) {
+                            var obj = data.responseJSON;
+                            // console.log(obj);
+                            // console.log("Error " + obj.email);
+                            $("#modalMessage").html("<p>" + obj.email + "</p>");
+                        }
+                    });
+                });
+                {% endif %} 
+
             }); <!--/document.ready-->
         </script>
         <script>
