@@ -4,6 +4,8 @@ from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 
+# from localflavor.us.models import PhoneNumberField
+from localflavor.us.us_states import US_STATES
 # Create your models here.
 
 
@@ -48,5 +50,33 @@ class EmailMarketingSignup(models.Model):
 
     def __str__(self):
         return self.email
+
+# NEW_STATE = (
+#     ("AB", "ABC STATE"),
+#     ("BC", "BC STATE"),
+#     )
+NEW_STATE = US_STATES
+
+class UserAddress(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    address = models.CharField(max_length=120)
+    address2 = models.CharField(max_length=120, null=True, blank=True)
+    city = models.CharField(max_length=120)
+    state = models.CharField(max_length=120, choices=NEW_STATE, null=True, blank=True)
+    country = models.CharField(max_length=120)
+    zipcode = models.CharField(max_length=25)
+    phone = models.CharField(max_length=120, null=True, blank=True)
+    shipping = models.BooleanField(default=True)
+    billing = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
+    updated = models.DateTimeField(auto_now_add=False, auto_now=True)
+
+    class Meta:
+        verbose_name = "UserAddress"
+        verbose_name_plural = "UserAddresss"
+
+    def __str__(self):
+        return str(self.user.username)
+    
     
 

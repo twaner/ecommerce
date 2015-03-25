@@ -9,3 +9,4 @@ wsgiref==0.1.2
 Pillow==2.7.0
 pytz==2014.10
 stripe==1.21.0
+django-localflavor==1.1

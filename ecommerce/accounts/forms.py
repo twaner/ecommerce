@@ -2,10 +2,27 @@ __author__ = 'taiowawaner'
 
 from django.contrib.auth import get_user_model
 from django import forms
+from .models import UserAddress
 
 User = get_user_model()
 
 # Forms
+
+class UserAddressForm(forms.Form):
+    class Meta:
+        model = UserAddress
+
+        fields = [
+            "address",  
+            "address2",  
+            "city",  
+            "state", 
+            "country", 
+            "zipcode", 
+            "phone",  
+            "billing"
+        ]
+    
 
 
 class LoginForm(forms.Form):
