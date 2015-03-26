@@ -3,7 +3,7 @@ from django.shortcuts import render, HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
-from .forms import LoginForm, RegistrationForm
+from .forms import LoginForm, RegistrationForm, UserAddressForm
 from .models import EmailConfirmed
 
 
@@ -112,3 +112,26 @@ def activation_view(request, activation_key):
         return render(request, "accounts/activation_complete.html", context)
     else:
         raise Http404
+
+
+def add_user_address(request):
+    print "add_user_address".format(request.GET)
+    try:
+        next_page = request.GET.get("next")
+    except Exception, e:
+        next_page = None
+    if request.method == "POST":
+        address_form = UserAddressForm(request.POST)
+        if address_form.is_valid(): 
+            new_address = address_form.save(commit=False)
+            new_address.user = request.user
+            new_address.save()
+            if next_page is not None:
+                return HttpResponseRedirect(reverse(str(next_page))+"?address_added=True")
+        else:
+            raise Http404
+
+
+
+
+

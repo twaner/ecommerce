@@ -25,6 +25,7 @@ urlpatterns = patterns('',
     url(r'^accounts/login/$', 'accounts.views.login_view', name='auth_login'),
     url(r'^accounts/register/$', 'accounts.views.registration_view', name='auth_register'),
     url(r'^accounts/activate/(?P<activation_key>\w+)/$', 'accounts.views.activation_view', name='activation_view'),
+    url(r'^ajax/add_user_address/$', 'accounts.views.add_user_address', name='ajax_add_user_address'),
 
     # Marketing
     url(r'^ajax/dismiss_marketing_message/$', 'marketing.views.dismiss_marketing_message',
