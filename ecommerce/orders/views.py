@@ -24,20 +24,17 @@ def checkout(request):
         cart = Cart.objects.get(id=the_id)
     except:
         the_id = None
-        print "checkout - first except no session cart_id"
         return HttpResponseRedirect(reverse('cart'))
 
     # If an order exists; based on cart in session. Try and get the order; if not create an order and save()
     try:
-        new_order = order.objects.get(cart=cart)
+        new_order = Order.objects.get(cart=cart)
     except Order.DoesNotExist:
         new_order = Order(cart=cart)
         new_order.user = request.user
         new_order.order_id = uuid_str_generator()
         new_order.save()
     except:
-        # Handle Error msg
-        print "checkout - except other than order DoesNotExist"
         return HttpResponseRedirect(reverse('cart'))
     address_form = UserAddressForm(request.POST or None)
     if address_form.is_valid():
@@ -48,13 +45,8 @@ def checkout(request):
     if new_order.status == "Finished":
         del request.session['cart_id']
         del request.session['items_total']
-        print "checkout - del the session"
         return HttpResponseRedirect(reverse('cart'))
 
     template = "orders/checkout.html"
     context = {"address_form": address_form}
     return render(request, template, context)
-
-
-
-

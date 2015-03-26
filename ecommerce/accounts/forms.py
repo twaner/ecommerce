@@ -8,7 +8,7 @@ User = get_user_model()
 
 # Forms
 
-class UserAddressForm(forms.Form):
+class UserAddressForm(forms.ModelForm):
     class Meta:
         model = UserAddress
 
