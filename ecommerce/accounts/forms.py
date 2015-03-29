@@ -9,6 +9,7 @@ User = get_user_model()
 # Forms
 
 class UserAddressForm(forms.ModelForm):
+    default = forms.BooleanField(label='Make Default')
     class Meta:
         model = UserAddress
 
@@ -20,7 +21,6 @@ class UserAddressForm(forms.ModelForm):
             "country", 
             "zipcode", 
             "phone",  
-            "billing"
         ]
     
 

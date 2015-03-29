@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from .forms import LoginForm, RegistrationForm, UserAddressForm
-from .models import EmailConfirmed
+from .models import EmailConfirmed, UserDefaultAddress
 
 
 # Create your views here.
@@ -126,6 +126,12 @@ def add_user_address(request):
             new_address = address_form.save(commit=False)
             new_address.user = request.user
             new_address.save()
+            is_default = form.cleaned_data['default']
+            if is_default:
+                # get or create a default address model - not edit!
+                default_address, created = UserDefaultAddress.objects.get_or_create(user=request.user)
+                default_address.shipping = new_address
+                default_address.save()
             if next_page is not None:
                 return HttpResponseRedirect(reverse(str(next_page))+"?address_added=True")
         else:
