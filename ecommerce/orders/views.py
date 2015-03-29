@@ -45,6 +45,9 @@ def checkout(request):
         address_form = UserAddressForm()
     else:
         address_form = None
+    current_addresses = UserAddress.objects.filter(user=request.user)
+    billing_addresses = UserAddress.objects.get_billing_addresses(user=request.user)
+    
     # If order if finished delete session
     if new_order.status == "Finished":
         del request.session['cart_id']
@@ -52,5 +55,9 @@ def checkout(request):
         return HttpResponseRedirect(reverse('cart'))
 
     template = "orders/checkout.html"
-    context = {"address_form": address_form}
+    context = {
+        "address_form": address_form,
+        "current_addresses": current_addresses,
+        "billing_addresses": billing_addresses,
+        }
     return render(request, template, context)
