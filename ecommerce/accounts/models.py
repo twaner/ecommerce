@@ -49,8 +49,8 @@ class EmailMarketingSignup(models.Model):
     # confirmed = models.BooleanField(default=False)
 
     class Meta:
-    verbose_name = "EmailMarketingSignup"
-    verbose_name_plural = "EmailMarketingSignups"
+        verbose_name = "EmailMarketingSignup"
+        verbose_name_plural = "EmailMarketingSignups"
 
     def __str__(self):
         return self.email
