@@ -48,6 +48,10 @@ class EmailMarketingSignup(models.Model):
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
     # confirmed = models.BooleanField(default=False)
 
+    class Meta:
+    verbose_name = "EmailMarketingSignup"
+    verbose_name_plural = "EmailMarketingSignups"
+
     def __str__(self):
         return self.email
 
@@ -56,6 +60,7 @@ class EmailMarketingSignup(models.Model):
 #     ("BC", "BC STATE"),
 #     )
 NEW_STATE = US_STATES
+
 
 class UserAddress(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
@@ -73,10 +78,11 @@ class UserAddress(models.Model):
 
     class Meta:
         verbose_name = "UserAddress"
-        verbose_name_plural = "UserAddresss"
+        verbose_name_plural = "UserAddresses"
 
     def __str__(self):
         return str(self.user.username)
+
     
     
 
