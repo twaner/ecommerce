@@ -16,6 +16,10 @@ class CartItem(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
 
+    class Meta:
+        verbose_name = "Cart Item"
+        verbose_name_plural = "Carts Items"
+
     def __str__(self):
         try:
             return str(self.cart.id)
@@ -28,6 +32,10 @@ class Cart(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
     active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Cart Item"
+        verbose_name_plural = "Carts Items"
 
     def __str__(self):
         return "Cart ID %s" % self.id

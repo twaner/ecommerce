@@ -40,3 +40,10 @@ class Order(models.Model):
 
     def __str__(self):
         return self.order_id
+
+    def get_final_amount(self):
+        instance = Order.objects.get(id=self.id)
+        instance.tax_total = (0.08 * float(self.sub_total))
+        instance.final_price = float(self.sub_total) + instance.tax_total
+        instance.save()
+        return instance.final_price

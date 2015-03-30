@@ -2,11 +2,12 @@ import time
 from .utils import uuid_str_generator
 import stripe
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, HttpResponseRedirect
 from carts.models import Cart
-from .models import Order
+from .models import Order, STATUS_CHOICES
 from accounts.models import UserAddress
 from accounts.forms import UserAddressForm
 
@@ -31,7 +32,6 @@ def orders(request):
 
 @login_required()
 def checkout(request):
-    #TODO require user login
     try:
         the_id = request.session['cart_id']
         cart = Cart.objects.get(id=the_id)
@@ -48,7 +48,15 @@ def checkout(request):
         new_order.order_id = uuid_str_generator()
         new_order.save()
     except:
+        new_order = None
         return HttpResponseRedirect(reverse('cart'))
+    final_amount = 0
+    if new_order is not None:
+        new_order.sub_total = cart.total
+        final_amount = new_order.get_final_amount()
+        print("CHECKOUT final {0}".format(final_amount))
+        new_order.final_price = final_amount
+        new_order.save()
     try:
         address_added = request.GET.get("address_added")
     except Exception, e:
@@ -76,22 +84,21 @@ def checkout(request):
             card = customer.sources.create(card=token)
             # Create a charge object; amount is sent in .01. i.e. 400 = 4.00
             charge = stripe.Charge.create(
-                amount=int(new_order.final_price * 100),
+                amount=int(final_amount * 100),
                 currency="usd",
                 source=card,  # obtained with Stripe.js
                 customer=customer,
                 description="Charge for {0}".format(str(request.user.username))
             )
-            print("checkout charge {0}".format(charge))
-            print("checkout card {0}".format(card))
+            # If the charge status is captured - Update order status; save; delete session data;
+            # add a message and reverse to orders page
             if charge['captured']:
-                print("CHARGED")
-
-    # If order if finished delete session
-    if new_order.status == "Finished":
-        del request.session['cart_id']
-        del request.session['items_total']
-        return HttpResponseRedirect(reverse('cart'))
+                new_order.status = STATUS_CHOICES[2][0]
+                new_order.save()
+                del request.session['cart_id']
+                del request.session['items_total']
+                messages.success(request, "Thank you for your order it has been completed!")
+                return HttpResponseRedirect(reverse('orders'))
 
     # render section
     template = "orders/checkout.html"

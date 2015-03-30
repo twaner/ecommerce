@@ -1,9 +1,10 @@
-from django.shortcuts import render, HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.shortcuts import render, HttpResponseRedirect
 from .models import Cart, CartItem
 from .helper_methods import get_cart_helper
-# Create your views here.
 from products.models import Product, Variation
+
+# Create your views here.
 
 
 def view(request):
