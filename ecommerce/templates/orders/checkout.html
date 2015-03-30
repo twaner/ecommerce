@@ -37,8 +37,8 @@
 {% endblock %}
 </script>
 
+<!--/ Content Area -->
 {% block content %}
-<!--/ Address Form -->
 <div>
 {% if address_form %}
 	<div class="col-sm-6 pull-right">
@@ -52,7 +52,6 @@
 {% endif %}
 </div>
 <!--/ Shipping addresses -->
-<div class="row">
     <h3>Current Total: ${{ order.get_final_amount|floatformat:"-2" }} </h3>
 	<form method="POST" action="" id="payment-form">
 		{% csrf_token %}
@@ -118,5 +117,4 @@
               <button type="submit">Submit Payment</button>
         </div> <!--/row-->
 	</form><!--/payment-form-->
-</div><!--/row-->
 {% endblock content %}

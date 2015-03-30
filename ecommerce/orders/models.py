@@ -1,7 +1,7 @@
+from decimal import Decimal
 from django.db import models
 # from django.contrib.auth.models import User
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from carts.models import Cart
 
 # User
@@ -20,6 +20,11 @@ STATUS_CHOICES = (
 
 # Create your models here.
 
+try:
+    tax_rate = settings.DEFAULT_TAX_RATE
+except Exception, e:
+    print(str(e))
+    raise NotImplementedError(str(e))
 
 class Order(models.Model):
     # TODO address
@@ -43,7 +48,11 @@ class Order(models.Model):
 
     def get_final_amount(self):
         instance = Order.objects.get(id=self.id)
-        instance.tax_total = (0.08 * float(self.sub_total))
-        instance.final_price = float(self.sub_total) + instance.tax_total
+        two_places = Decimal(10) ** -2
+        tax_rate_dec = Decimal("0".format(tax_rate))
+        sub_total_dec = Decimal(self.sub_total)
+        tax_total_dec = Decimal(tax_rate_dec * sub_total_dec).quantize(two_places)
+        instance.tax_total = tax_total_dec
+        instance.final_price = sub_total_dec + tax_rate_dec
         instance.save()
         return instance.final_price
