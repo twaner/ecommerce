@@ -53,6 +53,7 @@
 </div>
 <!--/ Shipping addresses -->
 <div class="row">
+    <h3>Current Total: ${{ order.final_price }} </h3>
 	<form method="POST" action="" id="payment-form">
 		{% csrf_token %}
 		{% if current_addresses %}
