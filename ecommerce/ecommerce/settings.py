@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -136,17 +137,18 @@ STRIPE_PUBLISHABLE_KEY = STRIPE_PUBLISHABLE_KEY
 
 # Email Confirmation
 from email_info import EMAIL_HOST, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, \
- EMAIL_PORT, EMAIL_BACKEND, EMAIL_USE_TLS, ACCOUNT_EMAIL_VERIFICATION
-DEFAULT_FROM_EMAIL = "CFE <twaner23@gmail.com>" #"Coding for Entrepreneuers <cfe@cfe.com>" to Add a name
+    EMAIL_PORT, EMAIL_BACKEND, EMAIL_USE_TLS, ACCOUNT_EMAIL_VERIFICATION
+
+DEFAULT_FROM_EMAIL = "CFE <twaner23@gmail.com>"  # "Coding for Entrepreneuers <cfe@cfe.com>" to Add a name
 
 # sendgrid - transactional emails
 EMAIL_HOST = EMAIL_HOST
 EMAIL_HOST_USER = EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
-EMAIL_USE_TLS = EMAIL_USE_TLS # contact provider
-EMAIL_PORT = EMAIL_PORT # contact provider
+EMAIL_USE_TLS = EMAIL_USE_TLS  # contact provider
+EMAIL_PORT = EMAIL_PORT  # contact provider
 EMAIL_BACKEND = EMAIL_BACKEND
-ACCOUNT_EMAIL_VERIFICATION=ACCOUNT_EMAIL_VERIFICATION
+ACCOUNT_EMAIL_VERIFICATION = ACCOUNT_EMAIL_VERIFICATION
 
 
 # Marketing Settings

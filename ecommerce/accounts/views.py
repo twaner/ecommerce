@@ -121,18 +121,21 @@ def add_user_address(request):
     except Exception, e:
         next_page = None
     if request.method == "POST":
+        print("add_user_address IN POST")
         address_form = UserAddressForm(request.POST)
-        if address_form.is_valid(): 
+        if address_form.is_valid():
+            print("add_user_address IN IS VALUE {0}".format(address_form))
             new_address = address_form.save(commit=False)
             new_address.user = request.user
             new_address.save()
-            is_default = form.cleaned_data['default']
+            is_default = address_form.cleaned_data['default']
             if is_default:
                 # get or create a default address model - not edit!
                 default_address, created = UserDefaultAddress.objects.get_or_create(user=request.user)
                 default_address.shipping = new_address
                 default_address.save()
             if next_page is not None:
+                print("IN if next page is not NONE")
                 return HttpResponseRedirect(reverse(str(next_page))+"?address_added=True")
         else:
             raise Http404

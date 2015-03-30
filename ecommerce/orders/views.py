@@ -3,10 +3,19 @@ from .utils import uuid_str_generator
 from django.shortcuts import render, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from carts.models import Cart
 from .models import Order
 from accounts.models import UserAddress
 from accounts.forms import UserAddressForm
+
+# Stripe API Key
+try:
+    stripe_pub = settings.STRIPE_PUBLISHABLE_KEY
+except Exception, e:
+    print(str(e))
+    raise NotImplementedError(str(e))
+
 
 # Create your views here.
 
@@ -47,17 +56,24 @@ def checkout(request):
         address_form = None
     current_addresses = UserAddress.objects.filter(user=request.user)
     billing_addresses = UserAddress.objects.get_billing_addresses(user=request.user)
-    
+
+    # request handler
+    if request.method == "POST":
+        print("checkout {0}".format(request.POST["stripeToken"]))
+
+
     # If order if finished delete session
     if new_order.status == "Finished":
         del request.session['cart_id']
         del request.session['items_total']
         return HttpResponseRedirect(reverse('cart'))
 
+    # render section
     template = "orders/checkout.html"
     context = {
         "address_form": address_form,
         "current_addresses": current_addresses,
         "billing_addresses": billing_addresses,
+        "stripe_pub": stripe_pub,
         }
     return render(request, template, context)

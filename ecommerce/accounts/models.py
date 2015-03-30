@@ -14,6 +14,10 @@ class UserStripe(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
     stripe_id = models.CharField(max_length=120, null=True, blank=True)
 
+    class Meta:
+        verbose_name = "Stripe User"
+        verbose_name_plural = "Stripe Users"
+
     def __str__(self):
         return str(self.stripe_id)
 
@@ -23,12 +27,16 @@ class EmailConfirmed(models.Model):
     activation_key = models.CharField(max_length=200)
     confirmed = models.BooleanField(default=False)
 
+    class Meta:
+        verbose_name = "Email Confirmed"
+        verbose_name_plural = "Email Confirmeds"
+
     def __str__(self):
         return str(self.confirmed)
 
     def activate_user_email(self):
         activation_url = "{0}{1}" \
-                         .format(settings.SITE_URL, reverse("activation_view", args=[self.activation_key]))
+            .format(settings.SITE_URL, reverse("activation_view", args=[self.activation_key]))
         context = {
             "activation_key": self.activation_key,
             "activation_url": activation_url,
@@ -49,15 +57,15 @@ class EmailMarketingSignup(models.Model):
     # confirmed = models.BooleanField(default=False)
 
     class Meta:
-        verbose_name = "EmailMarketingSignup"
-        verbose_name_plural = "EmailMarketingSignups"
+        verbose_name = "Email Marketing Signup"
+        verbose_name_plural = "Email Marketing Signups"
 
     def __str__(self):
         return self.email
 
 
 # NEW_STATE = (
-#     ("AB", "ABC STATE"),
+# ("AB", "ABC STATE"),
 #     ("BC", "BC STATE"),
 #     )
 
@@ -70,22 +78,23 @@ class UserAddressManager(models.Manager):
         # else:
         #     return ""
 
+
 NEW_STATE = US_STATES
 
 
 class UserDefaultAddress(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
-    shipping = models.ForeignKey("UserAddress", null=True, blank=True,\
-     related_name='user_address_shipping_default')
-    billing = models.ForeignKey("UserAddress", null=True, blank=True,\
-     related_name='user_address_billing_default')
+    shipping = models.ForeignKey("UserAddress", null=True, blank=True,
+                                 related_name='user_address_shipping_default')
+    billing = models.ForeignKey("UserAddress", null=True, blank=True,
+                                related_name='user_address_billing_default')
 
     class Meta:
-        verbose_name = "UserDefaultAddress"
-        verbose_name_plural = "UserDefaultAddresses"
-    
+        verbose_name = "User Default Address"
+        verbose_name_plural = "User Default Addresses"
+
     def __str__(self):
-        return "{0}".format(str(self.user.username))    
+        return "{0}".format(str(self.user.username))
 
 
 class UserAddress(models.Model):
@@ -105,8 +114,9 @@ class UserAddress(models.Model):
     objects = UserAddressManager()
 
     class Meta:
-        verbose_name = "UserAddress"
-        verbose_name_plural = "UserAddresses"
+        verbose_name = "User Address"
+        verbose_name_plural = "User Addresses"
+        ordering = ["-updated", "-timestamp"]
 
     def __str__(self):
         return str(self.user.username)
