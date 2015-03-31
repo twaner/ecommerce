@@ -75,7 +75,6 @@
 					<h3>Billing Addresses</h3>
 					{% for a in billing_addresses %}
 						{% if request.user.userdefaultaddress.billing.id == a.id %}
-                            <p>Bill</p>
                         <input type="radio" name="billing_address" value="{{ a.id }}" checked="checked"/>
                         {{ a.get_address }} <br />
                     {% else %}

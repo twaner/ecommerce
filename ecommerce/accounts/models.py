@@ -119,7 +119,7 @@ class UserAddress(models.Model):
         ordering = ["-updated", "-timestamp"]
 
     def __str__(self):
-        return str(self.user.username)
+        return self.get_address()
 
     def get_address(self):
         address = "{0} {1}".format(self.address, self.address2)

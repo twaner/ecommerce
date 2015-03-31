@@ -54,7 +54,6 @@ def checkout(request):
     if new_order is not None:
         new_order.sub_total = cart.total
         final_amount = new_order.get_final_amount()
-        print("CHECKOUT final {0}".format(final_amount))
         new_order.final_price = final_amount
         new_order.save()
     try:
@@ -71,17 +70,33 @@ def checkout(request):
 
     # request handler
     if request.method == "POST":
-        print("checkout {0}".format(request.POST["stripeToken"]))
         try:
             user_stripe = request.user.userstripe.stripe_id
             customer = stripe.Customer.retrieve(user_stripe)
-            print("checkout {0} stripe customer".format(customer))
         except:
             customer = None
         # Create Card Object
         if customer is not None:
+            shipping_address = request.POST['shipping_address']
+            billing_address = request.POST['billing_address']  # .get('billing_address')
+            try:
+                billing_address_instance = UserAddress.objects.get(id=billing_address)
+            except:
+                billing_address_instance = None
+            try:
+                shipping_address_instance = UserAddress.objects.get(id=shipping_address)
+            except:
+                shipping_address_instance = None
+            # Create card
             token = request.POST["stripeToken"]
             card = customer.sources.create(card=token)
+            card.address_line1 = billing_address_instance.address or None
+            card.address_line2 = billing_address_instance.address2 or None
+            card.address_city = billing_address_instance.city or None
+            card.address_zip = billing_address_instance.zipcode or None
+            card.address_country = billing_address_instance.country or None
+            card.address_state = billing_address_instance.state or None
+            card.save()
             # Create a charge object; amount is sent in .01. i.e. 400 = 4.00
             charge = stripe.Charge.create(
                 amount=int(final_amount * 100),
@@ -94,6 +109,8 @@ def checkout(request):
             # add a message and reverse to orders page
             if charge['captured']:
                 new_order.status = STATUS_CHOICES[2][0]
+                new_order.shipping_address = shipping_address_instance
+                new_order.billing_address = billing_address_instance
                 new_order.save()
                 del request.session['cart_id']
                 del request.session['items_total']

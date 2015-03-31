@@ -2,15 +2,9 @@ from decimal import Decimal
 from django.db import models
 # from django.contrib.auth.models import User
 from django.conf import settings
+from accounts.models import UserAddress
 from carts.models import Cart
 
-# User
-# try:
-#     user = get_user_model()
-# except ImportError:
-#     from django.contrib.auth.models import User
-#     user = get_user_model()
-# Choices
 
 STATUS_CHOICES = (
     ("Started", "Started"),
@@ -26,12 +20,15 @@ except Exception, e:
     print(str(e))
     raise NotImplementedError(str(e))
 
+
 class Order(models.Model):
     # TODO address
     user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
     order_id = models.CharField(max_length=120, default="ABC", unique=True)
     cart = models.ForeignKey(Cart)
     status = models.CharField(max_length=120, choices=STATUS_CHOICES, default='Started')
+    shipping_address = models.ForeignKey(UserAddress, related_name="shipping_address", default=1)
+    billing_address = models.ForeignKey(UserAddress, related_name="billing_address", default=1)
     sub_total = models.DecimalField(default=1.99, decimal_places=2, max_digits=10)
     tax_total = models.DecimalField(default=1.99, decimal_places=2, max_digits=10)
     final_price = models.DecimalField(default=1.99, decimal_places=2, max_digits=10)
