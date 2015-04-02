@@ -118,11 +118,11 @@ def add_user_address(request):
     print "add_user_address".format(request.GET)
     try:
         next_page = request.GET.get("next")
+        print("add_user_address {0}".format(next_page))
     except Exception, e:
         next_page = None
+    address_form = UserAddressForm(request.POST or None)
     if request.method == "POST":
-        print("add_user_address IN POST")
-        address_form = UserAddressForm(request.POST)
         if address_form.is_valid():
             print("add_user_address IN IS VALUE {0}".format(address_form))
             new_address = address_form.save(commit=False)
@@ -135,10 +135,15 @@ def add_user_address(request):
                 default_address.shipping = new_address
                 default_address.save()
             if next_page is not None:
-                print("IN if next page is not NONE")
-                return HttpResponseRedirect(reverse(str(next_page))+"?address_added=True")
-        else:
-            raise Http404
+                return HttpResponseRedirect(reverse(str(next_page)))
+    submit_btn = 'Save Address'
+    form_title = "Add New Address"
+    context = {
+        'form': address_form,
+        'submit_btn': submit_btn,
+        'form_title': form_title,
+    }
+    return render(request, "form.html", context)
 
 
 
