@@ -10,3 +10,4 @@ Pillow==2.7.0
 pytz==2014.10
 stripe==1.21.0
 django-localflavor==1.1
+django-widget-tweaks==1.3

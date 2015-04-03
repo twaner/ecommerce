@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'orders',
     'products',
     'localflavor',
+    'widget_tweaks',
 )
 
 MIDDLEWARE_CLASSES = (
