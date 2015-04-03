@@ -16,11 +16,25 @@ class ProductAdmin(admin.ModelAdmin):
     class Meta:
         model = Product
 
+
+class VariationAdmin(admin.ModelAdmin):
+    list_display = [
+        "title",
+        "category",
+        "product",
+        "price",
+        "active",
+        "updated",
+    ]
+
+    class Meta:
+        model = Variation
+
 # Registrations
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductImage)
-admin.site.register(Variation)
+admin.site.register(Variation, VariationAdmin)
 admin.site.register(Category)
 
 '''

@@ -118,13 +118,11 @@ def add_user_address(request):
     print "add_user_address".format(request.GET)
     try:
         next_page = request.GET.get("next")
-        print("add_user_address {0}".format(next_page))
     except Exception, e:
         next_page = None
     address_form = UserAddressForm(request.POST or None)
     if request.method == "POST":
         if address_form.is_valid():
-            print("add_user_address IN IS VALUE {0}".format(address_form))
             new_address = address_form.save(commit=False)
             new_address.user = request.user
             new_address.save()

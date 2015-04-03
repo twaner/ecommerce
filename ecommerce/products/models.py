@@ -1,5 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models.signals import post_save
 
 # Create your models here.
 
@@ -30,6 +31,7 @@ class Product(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
     active = models.BooleanField(default=True)
+    update_defaults = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -87,3 +89,34 @@ class Variation(models.Model):
 
     def __str__(self):
         return self.title
+
+# Signals
+
+# Product Signals
+
+
+def product_defaults(sender, instance, created, *args, **kwargs):
+    # print("product_defaults {0} \ninstance {1} \ncreated {2}".format(sender, instance.category.all(), created))
+    """
+    Signal to update product variations when a product is saved and the update_defaults field is True.
+    :param sender: The model class that just had an instance created.
+    :param instance: The actual instance being saved.
+    :param created: A boolean; True if a new record was created.
+    :param args: args.
+    :param kwargs: kwargs.
+    """
+    if instance.update_defaults:
+        categories = instance.category.all()
+        for i in categories:
+            print(i.id)
+            if i.id == 1:  # id for t-shirt
+                medium_size = Variation.objects.get_or_create(product=instance, category='size', title="Medium")
+                large_size = Variation.objects.get_or_create(product=instance, category='size', title="Large")
+                small_size = Variation.objects.get_or_create(product=instance, category='size', title="Small")
+        instance.update_defaults = False
+        instance.save()
+
+
+
+
+post_save.connect(product_defaults, sender=Product)
