@@ -1,6 +1,20 @@
 {% extends "base.html" %}
 <script>
 {% block jqeury_block %}
+
+    <!--/ Unselect radio button -->
+    $(".radio-label").click(function(){
+       $("label").removeClass("radio-label-selected");
+{#       $("label").addClass("radio-label");#}
+       $(this).addClass("radio-label-selected");
+    });
+
+    $(".billing-label").click(function(){
+       $("label").removeClass("billing-label-selected");
+{#       $("label").addClass("billing-label");#}
+       $(this).addClass("billing-label-selected");
+    });
+
     Stripe.setPublishableKey('{{ stripe_pub }}');
 
     jQuery(function($) {
@@ -60,91 +74,160 @@
             position: fixed;
         }
     }
+
+    .radio-label input[type='radio'] {
+        display: none;
+    }
+
+    .radio-label {
+        font-size: 14px;
+        font-weight: normal;
+        padding: 4px 30px;
+        border: 1px solid grey;
+        border-radius: 8px;
+    }
+    .radio-label:hover {
+        background-color: antiquewhite;
+{#        font-size: 14px;#}
+{#        font-weight: normal;#}
+{#        color: #ffffff;#}
+        cursor: pointer;
+    }
+    .radio-label-selected {
+        background-color: antiquewhite;
+{#        font-size: 14px;#}
+{#        font-weight: normal;#}
+{#        color: #ffffff;#}
+        cursor: pointer;
+{#        display: none;#}
+    }
+
+    {#Billing#}
+    .billing-label input[type='radio'] {
+        display: none;
+    }
+
+    .billing-label {
+        .radio
+        font-size: 14px;
+        font-weight: normal;
+        padding: 4px 30px;
+        border: 1px solid grey;
+        border-radius: 8px;
+    }
+    .billing-label:hover {
+        background-color: antiquewhite;
+{#        font-size: 14px;#}
+{#        font-weight: normal;#}
+{#        color: #ffffff;#}
+        cursor: pointer;
+        cursor: pointer;
+    }
+    .billing-label-selected {
+        background-color: antiquewhite;
+{#        font-size: 14px;#}
+{#        font-weight: normal;#}
+{#        color: #ffffff;#}
+        cursor: pointer;
+{#        display: none;#}
+    }
+
+
 {% endblock styles %}
 </style>
 <!--/ Content Area -->
 {% block content %}
+    <!--/ total block -->
     <div class="col-sm-3 pull-right">
         <div class="total">
             <h3>Current Total: ${{ order.get_final_amount|floatformat:"-2" }} </h3>
             <a href="#">Finalize Checkout</a>
         </div>
     </div><!--/col-sm-3 pull-right-->
-    <div class="col-sm-6 pull-right" style="display: none;" id="shippingAddressForm">
-        <h3>Add New Shipping Address</h3>
-        <form method="POST" action='{% url "ajax_add_user_address" %}?next=checkout'>
+    <!--/  -->
+    <div class="col-sm-9 pull-left">
+        <div class="col-sm-6 pull-right" style="display: none;" id="shippingAddressForm">
+            <h3>Add New Shipping Address</h3>
+            <form method="POST" action='{% url "ajax_add_user_address" %}?next=checkout'>
+                {% csrf_token %}
+                {{ address_form.as_p}}
+                <input type="submit" class="btn btn-default" value="Add Shipping Address"/>
+            </form>
+        </div><!--/ col-sm-6 pull right -->
+        <!--/ Shipping addresses -->
+        <form method="POST" action="" id="payment-form">
             {% csrf_token %}
-            {{ address_form.as_p}}
-            <input type="submit" class="btn btn-default" value="Add Shipping Address"/>
-        </form>
-    </div><!--/ col-sm-6 pull right -->
-    <!--/ Shipping addresses -->
-	<form method="POST" action="" id="payment-form">
-		{% csrf_token %}
-		{% if current_addresses %}
-			<div class="col-sm-6">
-				<h3>Shipping Addresses</h3>
-				{% for a in current_addresses %}
-                    {% if request.user.userdefaultaddress.shipping.id == a.id %}
-                        <input type="radio" name="shipping_address" value="{{ a.id }}" checked="checked"/>
-                        {{ a.get_address }} <br />
-                    {% else %}
-					    <input type="radio" name="shipping_address" value="{{ a.id }}"/> {{ a.get_address }} <br />
-                    {% endif %}
-				{% endfor %}
-                <a href="{% url 'add_user_address' %}" id="addShippingAddress">Add New Address</a>
-			</div>
-		{% endif %}
-		<!--/ Billing addresses -->
-		<div class="row">
-			{% if billing_addresses %}
-				<div class="col-sm-6">
-					<h3>Billing Addresses</h3>
-					{% for a in billing_addresses %}
-						{% if request.user.userdefaultaddress.billing.id == a.id %}
-                        <input type="radio" name="billing_address" value="{{ a.id }}" checked="checked"/>
-                        {{ a.get_address }} <br />
-                    {% else %}
-                            <p>NO Bill</p>
-					    <input type="radio" name="billing_address" value="{{ a.id }}"/> {{ a.get_address }} <br />
-                    {% endif %}
-					{% endfor %}
-				</div>
-			{% endif %}
-		</div><!--/row-->
-		<!--/ Credit Card Info -->
-		<div class="row">
-            <div class="col-sm-6">
-			  <h3>Credit Card Info</h3>
-              <div class="alert alert-danger payment-errors hidden" role="alert" id="card_errors_div">
-              </div>
-              <div class="form-row">
-                  <div class="row">
-                    <div class="col-xs-3" style="padding-right: 0px;">
-                      <b>Card Number</b>
-                      <input class="form-control" type="text" size="20" data-stripe="number"/>
-                    </div><!--/col-->
-                    <div class="col-xs-2">
-                      <b>CVC</b>
-                      <input class="form-control" type="text" size="4" data-stripe="cvc" placeholder="123"/>
+            {% if current_addresses %}
+                <div class="col-sm-6">
+                    <h3>Shipping Addresses</h3>
+                    {% for a in current_addresses %}
+                            {% if request.user.userdefaultaddress.shipping.id == a.id %}
+                                <label class="radio-label radio-label-selected">
+                                <input type="radio" name="shipping_address" value="{{ a.id }}" checked="checked"/>
+                                {{ a.get_address }}
+                            {% else %}
+                                <label class="radio-label">
+                                <input type="radio" name="shipping_address" value="{{ a.id }}"/> {{ a.get_address }} <br />
+                            {% endif %}
+                        </label><br />
+                    {% endfor %}
+                    <a href="{% url 'add_user_address' %}" id="addShippingAddress">Add New Address</a>
+                </div><!--/ col-sm-6-->
+            {% endif %}
+            <!--/ Billing addresses -->
+{#            <div class="row">#}
+                {% if billing_addresses %}
+                    <div class="col-sm-12">
+                        <h3>Billing Addresses</h3>
+                        {% for a in billing_addresses %}
+                                {% if request.user.userdefaultaddress.billing.id == a.id %}
+                                    <label class="billing-label billing-label-selected">
+                                    <input type="radio" name="billing_address" value="{{ a.id }}" checked="checked"/>
+                                    {{ a.get_address }}
+                                {% else %}
+                                    <label class="billing-label">
+                                <input type="radio" name="billing_address" value="{{ a.id }}"/> {{ a.get_address }} <br />
+                                {% endif %}
+                            </label> <br />
+                        {% endfor %}
                     </div>
-                  </div><!--/row-->
-              </div>
-              <br />
-              <div class="form-row">
-                    <label><span>Expiration (MM/YYYY)</span></label>
-                    <div class="row">
-                        <div class="col-xs-1" style="padding-right: 0px;">
-                              <input class="form-control" type="text" size="2" data-stripe="exp-month" placeholder="02"/>
+                {% endif %}
+{#            </div><!--/row-->#}
+            <!--/ Credit Card Info -->
+{#            <div class="row">#}
+                <div class="col-sm-12">
+                  <h3>Credit Card Info</h3>
+                  <div class="alert alert-danger payment-errors hidden" role="alert" id="card_errors_div">
+                  </div>
+                  <div class="form-row">
+                      <div class="row">
+                        <div class="col-xs-5" style="padding-right: 0px;">
+                          <b>Card Number</b>
+                          <input class="form-control" type="text" size="20" data-stripe="number"
+                                 placeholder="1234567890123456"/>
+                        </div><!--/col-->
+                        <div class="col-xs-3">
+                          <b>CVC</b>
+                          <input class="form-control" type="text" size="4" data-stripe="cvc" placeholder="123" style="align-content: center"/>
                         </div>
-                        <div class="col-xs-2">
-                            <input class="form-control" type="text" size="4" data-stripe="exp-year" placeholder="2016"/>
-                        </div>
-                  </div><!--/row-->
-              </div><!--/form-row-->
-              <br/>
-              <button class="btn btn-default btn-large" type="submit">Submit Payment</button>
-            </div>
-        </div> <!--/row-->
-	</form><!--/payment-form-->
+                      </div><!--/row-->
+                  </div>
+                  <br />
+                  <div class="form-row">
+                        <label><span>Expiration (MM/YYYY)</span></label>
+                        <div class="row">
+                            <div class="col-xs-2" style="padding-right: 0px;">
+                                  <input class="form-control" type="text" size="2" data-stripe="exp-month" placeholder="02" style="align-content: center"/>
+                            </div>
+                            <div class="col-xs-3">
+                                <input class="form-control" type="text" size="4" data-stripe="exp-year" placeholder="2016" style="align-content: center"/>
+                            </div>
+                      </div><!--/row-->
+                  </div><!--/form-row-->
+                  <br/>
+                  <button class="btn btn-default btn-large" type="submit">Submit Payment</button>
+                </div>
+{#            </div> <!--/row-->#}
+        </form><!--/payment-form-->
+    </div>
 {% endblock content %}
