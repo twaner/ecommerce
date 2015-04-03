@@ -46,7 +46,6 @@
     {% if not current_addresses %}
         $("#shippingAddressForm").fadeToggle();
     {% endif %}
-
 {% endblock %}
 </script>
 <style>
@@ -62,7 +61,7 @@
         }
     }
 {% endblock styles %}
-{#</style>#}
+</style>
 <!--/ Content Area -->
 {% block content %}
     <div class="col-sm-3 pull-right">
@@ -70,16 +69,15 @@
             <h3>Current Total: ${{ order.get_final_amount|floatformat:"-2" }} </h3>
             <a href="#">Finalize Checkout</a>
         </div>
-    </div>
-        <div class="col-sm-6 pull-right" style="display: none;" id="shippingAddressForm">
-            <h3>Add New Shipping Address</h3>
-            <form method="POST" action='{% url "ajax_add_user_address" %}?next=checkout'>
-                {% csrf_token %}
-                {{ address_form.as_p}}
-                <input type="submit" class="btn btn-default" value="Add Shipping Address"/>
-            </form>
-        </div>
-    </div>
+    </div><!--/col-sm-3 pull-right-->
+    <div class="col-sm-6 pull-right" style="display: none;" id="shippingAddressForm">
+        <h3>Add New Shipping Address</h3>
+        <form method="POST" action='{% url "ajax_add_user_address" %}?next=checkout'>
+            {% csrf_token %}
+            {{ address_form.as_p}}
+            <input type="submit" class="btn btn-default" value="Add Shipping Address"/>
+        </form>
+    </div><!--/ col-sm-6 pull right -->
     <!--/ Shipping addresses -->
 	<form method="POST" action="" id="payment-form">
 		{% csrf_token %}
