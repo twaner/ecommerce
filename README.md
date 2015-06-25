@@ -1,10 +1,10 @@
 # ecommerce
-django for entrepreneurs ecommerce lessons form the Udemy course - Coding for Entrepreneurs.
+django for entrepreneurs ecommerce lessons form the Udemy course - Coding for Entrepreneurs. An ecommerce site that allows a user to list and sell goods. Payments can be accepted with Stripe.
 
 ## Tech
 
-Python 2.7
-Django 1.7
+- Python 2.7
+- Django 1.7.4
 
 ## Contributing
 
